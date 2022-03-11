@@ -1,9 +1,9 @@
 import { TestBed, async, ComponentFixture, ComponentFixtureAutoDetect } from '@angular/core/testing';
 import { BrowserModule, By } from "@angular/platform-browser";
-import { UsersComponent } from './users.component';
+import { AllUsersComponent } from './all-users.component';
 
-let component: UsersComponent;
-let fixture: ComponentFixture<UsersComponent>;
+let component: AllUsersComponent;
+let fixture: ComponentFixture<AllUsersComponent>;
 
 describe('Users component', () => {
     beforeEach(async(() => {

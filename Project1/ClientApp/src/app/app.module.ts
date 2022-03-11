@@ -11,6 +11,8 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppRoutingModule } from './app-routing.module';
 import { UserStatusComponent } from './Components/user-status/user-status.component';
+import { OfficeStatusComponent } from './Components/office-status/office-status.component';
+import { AllUsersComponent } from './Components/all-users/all-users.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 
 @NgModule({
@@ -19,6 +21,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     NavMenuComponent,
     HomeComponent,
     UserStatusComponent,
+    OfficeStatusComponent,
+    AllUsersComponent,
     CounterComponent,
     FetchDataComponent
   ],
@@ -31,6 +35,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
       { path: 'counter', component: CounterComponent },
       { path: 'fetch-data', component: FetchDataComponent },
       { path: "user-status", component: UserStatusComponent },
+      { path: "office-status", component: OfficeStatusComponent },
+      { path: "all-users", component: AllUsersComponent },
     ]),
     NgxPaginationModule,
     BrowserAnimationsModule
