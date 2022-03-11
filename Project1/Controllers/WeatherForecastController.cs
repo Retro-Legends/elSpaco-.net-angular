@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Project1.Controllers
+namespace elSpaco.Controllers
 {
     [ApiController]
     [Route("[controller]")]

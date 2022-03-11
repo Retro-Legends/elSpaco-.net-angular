@@ -1,6 +1,6 @@
 using System;
 
-namespace Project1
+namespace elSpaco
 {
     public class WeatherForecast
     {

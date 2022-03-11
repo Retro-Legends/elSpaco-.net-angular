@@ -1,0 +1,42 @@
+<h3>UserStatus</h3>
+
+<div class="input-group mb-3">
+  <input type="text"
+         class="form-control"
+         placeholder="Search by Name"
+         [(ngModel)]="Name" />
+  <div class="input-group-append">
+    <button class="btn btn-outline-secondary"
+            type="button"
+            (click)="selectUsers()">
+      Search
+    </button>
+  </div>
+</div>
+
+<ul>
+  <li *ngFor="let user of userStatusList">
+    <button type="button" (click)="onSelect(user)">
+      <span>{{user.Name}}</span>
+      <span>{{user.Surname}}</span>
+    </button>
+  </li>
+</ul>
+<pagination-controls previousLabel="Prev" nextLabel="Next" responsive="true">
+</pagination-controls>
+Items per Page:
+<select (change)="handlePageSizeChange($event)">
+  <option *ngFor="let size of pageSizes" [ngValue]="size">
+    {{ size }}
+  </option>
+</select>
+
+<div *ngIf="selectedUser">
+
+  <h2>{{selectedUser.Name}} Details</h2>
+  <div>
+    building: {{selectedUser.BuildingName}}
+    office: {{selectedUser.Office}}
+    Remote: {{selectedUser.RemoteStatus}}
+  </div>
+</div>
