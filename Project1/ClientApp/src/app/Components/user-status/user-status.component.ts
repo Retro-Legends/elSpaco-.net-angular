@@ -18,7 +18,7 @@ export class UserStatusComponent implements OnInit {
     console.log(UserStatusList);
   }
 
-  onSelect(user: UserStatus, index: number): void {
+  onSelect(user: UserStatus): void {
     this.selectedUser = user;
   }
 
