@@ -20,7 +20,7 @@
         <span>{{user.name}} </span>
         <span>{{user.surname}}</span>
       </div>
-      <div *ngIf="selectedUser">
+      <div *ngIf="selectedUser && selectedUser = user">
         <div>
           building: {{selectedUser.buildingName}}
           office: {{selectedUser.office}}

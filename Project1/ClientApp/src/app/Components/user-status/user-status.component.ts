@@ -29,8 +29,10 @@ export class UserStatusComponent implements OnInit {
   ngOnInit(): void {}
 
   onSelect(user: UserStatus): void {
-    this.selectedUser = user;
-
+    if (this.selectedUser == null)
+      this.selectedUser = user;
+    else
+      this.selectedUser = undefined;
   }
   fliter(users: UserStatus): void {
     //someLogicHere
