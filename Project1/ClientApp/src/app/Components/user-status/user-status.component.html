@@ -16,8 +16,17 @@
 <ul>
   <li *ngFor="let user of filteredUserList">
     <button type="button" (click)="onSelect(user)">
-      <span>{{user.name}} </span>
-      <span>{{user.surname}}</span>
+      <div>
+        <span>{{user.name}} </span>
+        <span>{{user.surname}}</span>
+      </div>
+      <div *ngIf="selectedUser">
+        <div>
+          building: {{selectedUser.buildingName}}
+          office: {{selectedUser.office}}
+          Remote: {{selectedUser.remoteStatus}}
+        </div>
+      </div>
     </button>
   </li>
 </ul>
