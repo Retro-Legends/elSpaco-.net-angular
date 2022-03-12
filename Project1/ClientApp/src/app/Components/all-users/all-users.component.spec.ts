@@ -8,13 +8,13 @@ let fixture: ComponentFixture<AllUsersComponent>;
 describe('Users component', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [ UsersComponent ],
+            declarations: [ AllUsersComponent ],
             imports: [ BrowserModule ],
             providers: [
                 { provide: ComponentFixtureAutoDetect, useValue: true }
             ]
         });
-        fixture = TestBed.createComponent(UsersComponent);
+        fixture = TestBed.createComponent(AllUsersComponent);
         component = fixture.componentInstance;
     }));
 
