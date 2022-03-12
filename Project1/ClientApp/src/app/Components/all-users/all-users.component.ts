@@ -1,8 +1,6 @@
 import { Component } from '@angular/core'
 import { UserStatusComponent } from '../user-status/user-status.component';
 import { OfficeStatusComponent } from '../office-status/office-status.component';
-import { CounterComponent } from '../../counter/counter.component';
-import { FetchDataComponent } from '../../fetch-data/fetch-data.component';
 
 @Component({
     selector: 'app-users',
