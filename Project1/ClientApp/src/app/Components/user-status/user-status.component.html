@@ -13,12 +13,11 @@
     </button>
   </div>
 </div>
-
 <ul>
-  <li *ngFor="let user of userStatusList">
+  <li *ngFor="let user of filteredUserList">
     <button type="button" (click)="onSelect(user)">
-      <span>{{user.Name}}</span>
-      <span>{{user.Surname}}</span>
+      <span>{{user.name}} </span>
+      <span>{{user.surname}}</span>
     </button>
   </li>
 </ul>
@@ -33,10 +32,10 @@ Items per Page:
 
 <div *ngIf="selectedUser">
 
-  <h2>{{selectedUser.Name}} Details</h2>
+  <h2>{{selectedUser.name}} Details</h2>
   <div>
-    building: {{selectedUser.BuildingName}}
-    office: {{selectedUser.Office}}
-    Remote: {{selectedUser.RemoteStatus}}
+    building: {{selectedUser.buildingName}}
+    office: {{selectedUser.office}}
+    Remote: {{selectedUser.remoteStatus}}
   </div>
 </div>
