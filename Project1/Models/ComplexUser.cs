@@ -2,10 +2,11 @@
 {
     public class ComplexUser
     {
-        string Name;
-        string Surname;
-        string BuildingName;
-        string Office;
-        string RemoteStatus;
+        public int Id { get; set; }
+        public string Name{ get; set; }
+        public string Surname{ get; set; }
+        public string BuildingName{ get; set; }
+        public string Office{ get; set; }
+        public string RemoteStatus{ get; set; }
     }
 }
