@@ -18,12 +18,6 @@ export class UserStatusComponent implements OnInit {
     http.get<UserStatus[]>(baseUrl + 'alluser/').subscribe(result => {
       this.userStatus = result;
     }, error => console.error(error));
-    console.log(baseUrl);
-
-    //Scoate asta mai tarziu
-    this.filtredUserList = this.userStatus;
-    //console.log(this.userStatus);
-    //
   }
 
   ngOnInit(): void {}
