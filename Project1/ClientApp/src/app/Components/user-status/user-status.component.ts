@@ -42,5 +42,6 @@ interface UserStatus {
   buildingName: string;
   office: string;
   remoteStatus: string;
+  role: string;
 }
 
