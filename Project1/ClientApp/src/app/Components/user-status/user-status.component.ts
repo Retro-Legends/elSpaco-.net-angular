@@ -3,8 +3,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 
 @Component({
     selector: 'app-user-status',
-    templateUrl: './user-status.component.html',
-    styleUrls: ['./user-status.component.css']
+  templateUrl: './user-status.component.html',
+  styleUrls: ['../../all-css.component.css']
 })
 /** UserStatus component*/
 export class UserStatusComponent implements OnInit {
