@@ -17,7 +17,7 @@ namespace elSpaco.Controllers
     {
         // GET
         [HttpGet]
-        public async Task<IEnumerable<ComplexUser>> GetAsync()
+        public async Task<IEnumerable<ComplexUser>> GetComplexUsersAsync()
         {
 
             var result = new List<ComplexUser>();
@@ -72,40 +72,85 @@ namespace elSpaco.Controllers
             return Enumerable.ToArray(result);
         }
 
-        
-        /* las pe mai indata
-        [HttpGet("{id}")]
-        public async Task<List<ComplexUser>> Search(string str,string type)
-        {
-            using (HttpClient httpClient = new HttpClient())
+        [HttpGet("{id:int}")]
+        public async Task<OfficeStatusModel> GetOfficeStatusAsync(int id)
             {
-                if (type.ToLower() == "name" || type.ToLower() == "surname")
+                var result = new OfficeStatusModel();
+                using (HttpClient httpClient = new HttpClient())
                 {
-                    httpClient.DefaultRequestHeaders.Add(str, type.ToLower());
-                }
-                else
-                {
-                    //throw new HttpResponseException(responseMessage);
-                }
-                string uri = host + path + "?mkt=" + market + "&q=" + System.Net.WebUtility.UrlEncode(query);
+                //se sterge de aici
+                var employee = JsonConvert.DeserializeObject<EmployeeFromApi>(
+                        await httpClient.GetStringAsync("http://127.0.0.1:8000/api_employee/" + id)
+                    );
 
-                HttpResponseMessage response = await client.GetAsync(uri);
+                //ca sa pot sa testez pana se fac modificarile necesare la api
+                //StergeAici
+                employee.IdDesk = 1;
+                //pana aici
 
-                string contentString = await response.Content.ReadAsStringAsync();
-                dynamic parsedJson = JsonConvert.DeserializeObject(contentString);
-                Console.WriteLine(parsedJson);
+                //get desk current user
+                var curentUserDesk = JsonConvert.DeserializeObject<DeskFromApi>(
+                        await httpClient.GetStringAsync("http://127.0.0.1:8000/api_desk/" + "1"
+                                    /* se sterge + "1" si se lasa ce e mai jos
+                                        (JsonConvert.DeserializeObject<EmployeeFromApi>(await httpClient 
+                                        .GetStringAsync("http://127.0.0.1:8000/api_employee/" + id))).IdDesk  */
+                                    ));
+                //get office curent user
+                var office = JsonConvert.DeserializeObject<OfficeFromApi>(
+                        await httpClient.GetStringAsync("http://127.0.0.1:8000/api_office/" + curentUserDesk.office));
+                //get building current user
+                var building = JsonConvert.DeserializeObject<CladiriFromApi>(
+                        await httpClient.GetStringAsync("http://127.0.0.1:8000/api_cladire/" + office.building));
+                //get all desks in the office where curent user is situated
+                var desks = JsonConvert.DeserializeObject<List<DeskFromApi>>(
+                        await httpClient.GetStringAsync("http://127.0.0.1:8000/api_desks/")).Where(x => x.office == curentUserDesk.office).ToList();
+                //get all employees 
+                var auxUsers = JsonConvert.DeserializeObject<List<EmployeeFromApi>>(
+                    await httpClient.GetStringAsync("http://127.0.0.1:8000/api_employees/"));
+                //join to get userlist in curent office 
+                var userList = from user in auxUsers
+                               join desk in desks on user.IdDesk equals desk.idDesk
+                               select user;
+
+                result = new OfficeStatusModel() {
+                    OfficeName = office.nameOffice,
+                    BuildingName = building.denCladire,
+                    Users = (List<EmployeeFromApi>)userList,
+                    OcupiedDeskCount = office.usedDesks,
+                    UsableDeskCount = office.deskCount,
+                    FreeDeskCount = 0,
+                    OcupationPercentage=0
+                };
+                }
+                return result;
             }
-            return "value";
-        }
-        */
 
 
-        // GET api/<UserController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+            /* las pe mai indata
+            [HttpGet("{id}")]
+            public async Task<List<ComplexUser>> Search(string str,string type)
+            {
+                using (HttpClient httpClient = new HttpClient())
+                {
+                    if (type.ToLower() == "name" || type.ToLower() == "surname")
+                    {
+                        httpClient.DefaultRequestHeaders.Add(str, type.ToLower());
+                    }
+                    else
+                    {
+                        //throw new HttpResponseException(responseMessage);
+                    }
+                    string uri = host + path + "?mkt=" + market + "&q=" + System.Net.WebUtility.UrlEncode(query);
+
+                    HttpResponseMessage response = await client.GetAsync(uri);
+
+                    string contentString = await response.Content.ReadAsStringAsync();
+                    dynamic parsedJson = JsonConvert.DeserializeObject(contentString);
+                    Console.WriteLine(parsedJson);
+                }
+                return "value";
+            }
+            */
 
         // POST api/<UserController>
         [HttpPost]
