@@ -110,7 +110,9 @@ namespace elSpaco.Controllers
                 //join to get userlist in curent office 
                 var userList = from user in auxUsers
                                join desk in desks on user.IdDesk equals desk.idDesk
-                               select user;
+                               select new EmployeeFromApi { IdEmployee = user.IdEmployee, firstName =user.firstName, lastName = user.lastName,
+                               RemoteStatus =user.RemoteStatus, Role = user.Role, Gender =user.Gender, Nationality = user.Nationality,
+                               Adress = user.Adress,IdDesk = user.IdDesk};
 
                 result = new OfficeStatusModel() {
                     OfficeName = office.nameOffice,
@@ -121,6 +123,7 @@ namespace elSpaco.Controllers
                     FreeDeskCount = 0,
                     OcupationPercentage=0
                 };
+                Debug.Write("cv");
                 }
                 return result;
             }

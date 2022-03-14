@@ -19,8 +19,10 @@ namespace elSpaco.Models
         }
         public int OcupationPercentage 
         {
-            get { return ((this.UsableDeskCount * 100) / this.OcupiedDeskCount);  }
-            set { value = (this.UsableDeskCount*100) / this.OcupiedDeskCount; }
+            get { if (this.OcupiedDeskCount != 0) return ((this.UsableDeskCount * 100) / this.OcupiedDeskCount);
+                else return 0; }
+            set { if (this.OcupiedDeskCount != 0) value = (this.UsableDeskCount * 100) / this.OcupiedDeskCount;
+                else value = 0; }
         }
         //schimba aici free desk si OcupationPercentage
     }

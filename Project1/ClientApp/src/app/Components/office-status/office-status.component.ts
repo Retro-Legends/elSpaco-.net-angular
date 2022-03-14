@@ -9,12 +9,12 @@ import { Component, Inject } from '@angular/core';
 /** OfficeStatus component*/
 export class OfficeStatusComponent {
 
-  officeStatus = ThisOfficeStatus;
+  officeStatus: OfficeStatus;
     
     /** OfficeStatus ctor */
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    http.get<UserStatus[]>(baseUrl + 'alluser/').subscribe(result => {
-      this.userStatus = result;
+    http.get<OfficeStatus>(baseUrl + getUserId()).subscribe(result => { 
+      this.officeStatus = result;
     }, error => console.error(error));
   }
 }
@@ -29,12 +29,7 @@ interface OfficeStatus {
   OcupationPercentage: number;
 }
 
-export const ThisOfficeStatus: OfficeStatus = {
-  OfficeName : "3",
-  BuildingName : "cafenea",
-  Users : "bogan , Marcel",
-  OcupiedDeskCount : 2,
-  UsableDeskCount : 4,
-  FreeDeskCount : 2,
-  OcupationPercentage : 50
+function getUserId() {
+  return "alluser/1";
+  //SchimbaAici
 }
