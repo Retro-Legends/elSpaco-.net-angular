@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, Inject } from '@angular/core';
 
 @Component({
     selector: 'app-office-status',
@@ -8,30 +9,27 @@ import { Component } from '@angular/core';
 /** OfficeStatus component*/
 export class OfficeStatusComponent {
 
-  officeStatus = ThisOfficeStatus;
+  officeStatus: OfficeStatus;
     
     /** OfficeStatus ctor */
-    constructor() {
-
-    }
+  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+    http.get<OfficeStatus>(baseUrl + getUserId()).subscribe(result => { 
+      this.officeStatus = result;
+    }, error => console.error(error));
+  }
 }
 
 interface OfficeStatus {
-  OfficeName: string;
-  BuildingName: string;
-  Users: string;
-  OcupiedDeskCount: number;
-  UsableDeskCount: number;
-  FreeDeskCount: number;
-  OcupationPercentage: number;
+  officeName: string;
+  buildingName: string;
+  users: string[];
+  ocupiedDeskCount: number;
+  usableDeskCount: number;
+  freeDeskCount: number;
+  ocupationPercentage: number;
 }
 
-export const ThisOfficeStatus: OfficeStatus = {
-  OfficeName : "3",
-  BuildingName : "cafenea",
-  Users : "bogan , Marcel",
-  OcupiedDeskCount : 2,
-  UsableDeskCount : 4,
-  FreeDeskCount : 2,
-  OcupationPercentage : 50
+function getUserId() {
+  return "alluser/1";
+  //SchimbaAici
 }

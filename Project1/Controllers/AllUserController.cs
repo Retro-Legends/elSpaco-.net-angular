@@ -108,19 +108,37 @@ namespace elSpaco.Controllers
                 var auxUsers = JsonConvert.DeserializeObject<List<EmployeeFromApi>>(
                     await httpClient.GetStringAsync("http://127.0.0.1:8000/api_employees/"));
                 //join to get userlist in curent office 
+
+                foreach (var emp in auxUsers)
+                { emp.IdDesk = 1; }
+
                 var userList = from user in auxUsers
                                join desk in desks on user.IdDesk equals desk.idDesk
-                               select user;
+                               select new EmployeeFromApi { IdEmployee = user.IdEmployee, firstName =user.firstName, lastName = user.lastName,
+                               RemoteStatus = user.RemoteStatus, Role = user.Role, Gender =user.Gender, Nationality = user.Nationality,
+                               Adress = user.Adress,IdDesk = user.IdDesk};
+
+                OfficeStatusModel off = new OfficeStatusModel();
+
+                off.OfficeName = office.nameOffice;
+                off.BuildingName = building.denCladire;
+                off.Users = userList.ToArray();
+                off.OcupiedDeskCount = office.usedDesks;
+                off.UsableDeskCount = office.deskCount;
+                off.FreeDeskCount = 0;
+                off.OcupationPercentage = 0;
+               
 
                 result = new OfficeStatusModel() {
                     OfficeName = office.nameOffice,
                     BuildingName = building.denCladire,
-                    Users = (List<EmployeeFromApi>)userList,
+                    Users = userList.ToArray(),
                     OcupiedDeskCount = office.usedDesks,
                     UsableDeskCount = office.deskCount,
                     FreeDeskCount = 0,
                     OcupationPercentage=0
                 };
+                Debug.Write("cv");
                 }
                 return result;
             }
