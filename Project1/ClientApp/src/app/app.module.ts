@@ -12,6 +12,10 @@ import { UserStatusComponent } from './Components/user-status/user-status.compon
 import { OfficeStatusComponent } from './Components/office-status/office-status.component';
 import { AllUsersComponent } from './Components/all-users/all-users.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { AuthModule } from '@auth0/auth0-angular';
+import { environment as env } from '../environments/environment';
+import { UserProfileComponent } from './user-profile/user-profile.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -20,7 +24,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     HomeComponent,
     UserStatusComponent,
     OfficeStatusComponent,
-    AllUsersComponent
+    AllUsersComponent,
+    UserProfileComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -31,9 +36,15 @@ import { NgxPaginationModule } from 'ngx-pagination';
       { path: "user-status", component: UserStatusComponent },
       { path: "office-status", component: OfficeStatusComponent },
       { path: "all-users", component: AllUsersComponent },
+      { path: "user-profile", component: UserProfileComponent }
+
     ]),
     NgxPaginationModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    AuthModule.forRoot({
+      ...env.auth,
+    }),
+    NgbModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
