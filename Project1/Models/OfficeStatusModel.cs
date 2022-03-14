@@ -9,7 +9,7 @@ namespace elSpaco.Models
     {
         public string OfficeName { get; set; }
         public string BuildingName { get; set; }
-        public List<EmployeeFromApi> Users { get; set; }
+        public EmployeeFromApi[] Users { get; set; }
         public int OcupiedDeskCount { get; set; }
         public int UsableDeskCount { get; set; }
         public int FreeDeskCount

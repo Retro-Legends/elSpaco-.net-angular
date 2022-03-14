@@ -20,13 +20,13 @@ export class OfficeStatusComponent {
 }
 
 interface OfficeStatus {
-  OfficeName: string;
-  BuildingName: string;
-  Users: string;
-  OcupiedDeskCount: number;
-  UsableDeskCount: number;
-  FreeDeskCount: number;
-  OcupationPercentage: number;
+  officeName: string;
+  buildingName: string;
+  users: string[];
+  ocupiedDeskCount: number;
+  usableDeskCount: number;
+  freeDeskCount: number;
+  ocupationPercentage: number;
 }
 
 function getUserId() {

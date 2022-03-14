@@ -4,39 +4,39 @@
       <td>
         Office:
       </td>
-      <td>{{officeStatus.OfficeName}}</td>
+      <td>{{officeStatus.officeName}}</td>
     </tr>
     <tr>
       <td>
         Building:
       </td>
-      <td>{{officeStatus.BuildingName}}</td>
+      <td>{{officeStatus.buildingName}}</td>
     </tr>
     <tr>
       <td>
         People:
       </td>
-      <td>{{officeStatus.Users}}</td>
+      <td *ngfor = "let user of officeStatus.users">{{user}}</td>
     </tr>
     <tr>
       <td>
         Ocupied Desk Count:
       </td>
-      <td>{{officeStatus.OcupiedDeskCount}}</td>
+      <td>{{officeStatus.ocupiedDeskCount}}</td>
       <td>
         Usable Desk Count:
       </td>
-      <td>{{officeStatus.UsableDeskCount}}</td>
+      <td>{{officeStatus.usableDeskCount}}</td>
     </tr>
     <tr>
       <td>
         Free Desk Count:
       </td>
-      <td>{{officeStatus.FreeDeskCount}}</td>
+      <td>{{officeStatus.freeDeskCount}}</td>
       <td>
         Ocupation Percentage:
       </td>
-      <td>{{officeStatus.OcupationPercentage}}</td>
+      <td>{{officeStatus.ocupationPercentage}}</td>
     </tr>
   </table>
 </div>
