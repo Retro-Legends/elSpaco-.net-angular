@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, Inject } from '@angular/core';
 
 @Component({
     selector: 'app-office-status',
@@ -11,9 +12,11 @@ export class OfficeStatusComponent {
   officeStatus = ThisOfficeStatus;
     
     /** OfficeStatus ctor */
-    constructor() {
-
-    }
+  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+    http.get<UserStatus[]>(baseUrl + 'alluser/').subscribe(result => {
+      this.userStatus = result;
+    }, error => console.error(error));
+  }
 }
 
 interface OfficeStatus {
