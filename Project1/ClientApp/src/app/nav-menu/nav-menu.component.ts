@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
+import { AppUserAuth } from '../auth.model';
 
 
 @Component({
@@ -10,9 +11,14 @@ import { AuthService } from '@auth0/auth0-angular';
 })
 export class NavMenuComponent {
   isExpanded = false;
+  isAuthenticated: boolean;
 
   constructor(public auth: AuthService,
-    @Inject(DOCUMENT) private doc: Document) { }
+    @Inject(DOCUMENT) private doc: Document) {
+
+  }
+  public ngOnInit(): void {
+  }
 
   collapse() {
     this.isExpanded = false;
@@ -22,13 +28,23 @@ export class NavMenuComponent {
     this.isExpanded = !this.isExpanded;
   }
 
-  loginWithRedirect() {
+  async loginWithRedirect() {
+    
     this.auth.loginWithRedirect();
+    this.auth.isAuthenticated$.subscribe(
+      (success: boolean) => {
+        this.isAuthenticated = true;
+      },
+      error => this.isAuthenticated = false);
   }
 
   logout() {
     this.auth.logout({ returnTo: this.doc.location.origin });
-    console.log("ajunge aici");
+    this.auth.isAuthenticated$.subscribe(
+      (success: boolean) => {
+        this.isAuthenticated = true;
+      },
+      error => this.isAuthenticated = false);
   }
 
 }

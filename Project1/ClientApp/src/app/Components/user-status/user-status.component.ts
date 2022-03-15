@@ -12,6 +12,7 @@ export class UserStatusComponent implements OnInit {
   public userStatus: UserStatus[];
   selectedUser?: UserStatus;
   public filtredUserList: UserStatus[];
+  public pagesize: 10;
 
   /** UserStatus ctor */
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {

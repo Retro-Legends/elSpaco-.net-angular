@@ -6,6 +6,7 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using elSpaco.Models;
+using Microsoft.Extensions.Configuration;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,6 +16,8 @@ namespace elSpaco.Controllers
     [ApiController]
     public class AllUserController : ControllerBase
     {
+        string baseurl;
+        AllUserController(IConfiguration config) {baseurl = config.GetConnectionString("base"); }
         // GET
         [HttpGet]
         public async Task<IEnumerable<ComplexUser>> GetComplexUsersAsync()
@@ -24,7 +27,7 @@ namespace elSpaco.Controllers
             using (HttpClient httpClient = new HttpClient())
             {
                 var employeeslist = JsonConvert.DeserializeObject<List<EmployeeFromApi>>(
-                        await httpClient.GetStringAsync("http://127.0.0.1:8000/api_employees")
+                        await httpClient.GetStringAsync(baseurl + "api_employees")
                     );
                 
                 //ca sa pot sa testez pana se fac modificarile necesare la api
@@ -34,13 +37,13 @@ namespace elSpaco.Controllers
                 //pana aici
 
                 var deskslist = JsonConvert.DeserializeObject<List<DeskFromApi>>(
-                        await httpClient.GetStringAsync("http://127.0.0.1:8000/api_desks")
+                        await httpClient.GetStringAsync(baseurl + "api_desks")
                     );
                 var officelist = JsonConvert.DeserializeObject<List<OfficeFromApi>>(
-                        await httpClient.GetStringAsync("http://127.0.0.1:8000/api_offices")
+                        await httpClient.GetStringAsync(baseurl + "api_offices")
                     );
                 var buildinglist = JsonConvert.DeserializeObject<List<CladiriFromApi>>(
-                        await httpClient.GetStringAsync("http://127.0.0.1:8000/api_cladiri")
+                        await httpClient.GetStringAsync(baseurl + "api_cladiri")
                     );
                 var complex = from employee in employeeslist
                                join desk in deskslist on employee.IdDesk equals desk.idDesk into aux1
@@ -55,32 +58,18 @@ namespace elSpaco.Controllers
                 foreach (var c in complex)
                     result.Add(c);
             }
-            /* las aici pentru testare
-            List<ComplexUser> result = new List<ComplexUser>();
-            ComplexUser aux;
-            for (int i = 0; i < 15; i++)
-            {
-                aux = new ComplexUser();
-                aux.Name = "Abc" + i.ToString();
-                aux.Surname = "Dr Nice";
-                aux.BuildingName = "acasa";
-                aux.Office = "dormitor";
-                aux.RemoteStatus = "50";
-                result.Add(aux);
-            }
-            */
             return Enumerable.ToArray(result);
         }
 
         [HttpGet("{id:int}")]
         public async Task<OfficeStatusModel> GetOfficeStatusAsync(int id)
+        {
+            var result = new OfficeStatusModel();
+            using (HttpClient httpClient = new HttpClient())
             {
-                var result = new OfficeStatusModel();
-                using (HttpClient httpClient = new HttpClient())
-                {
                 //se sterge de aici
                 var employee = JsonConvert.DeserializeObject<EmployeeFromApi>(
-                        await httpClient.GetStringAsync("http://127.0.0.1:8000/api_employee/" + id)
+                        await httpClient.GetStringAsync(baseurl + "api_employee/" + id)
                     );
 
                 //ca sa pot sa testez pana se fac modificarile necesare la api
@@ -90,23 +79,23 @@ namespace elSpaco.Controllers
 
                 //get desk current user
                 var curentUserDesk = JsonConvert.DeserializeObject<DeskFromApi>(
-                        await httpClient.GetStringAsync("http://127.0.0.1:8000/api_desk/" + "1"
+                        await httpClient.GetStringAsync(baseurl + "api_desk/" + "1"
                                     /* se sterge + "1" si se lasa ce e mai jos
                                         (JsonConvert.DeserializeObject<EmployeeFromApi>(await httpClient 
-                                        .GetStringAsync("http://127.0.0.1:8000/api_employee/" + id))).IdDesk  */
+                                        .GetStringAsync(baseurl + "api_employee/" + id))).IdDesk  */
                                     ));
                 //get office curent user
                 var office = JsonConvert.DeserializeObject<OfficeFromApi>(
-                        await httpClient.GetStringAsync("http://127.0.0.1:8000/api_office/" + curentUserDesk.office));
+                        await httpClient.GetStringAsync(baseurl + "api_office/" + curentUserDesk.office));
                 //get building current user
                 var building = JsonConvert.DeserializeObject<CladiriFromApi>(
-                        await httpClient.GetStringAsync("http://127.0.0.1:8000/api_cladire/" + office.building));
+                        await httpClient.GetStringAsync(baseurl + "api_cladire/" + office.building));
                 //get all desks in the office where curent user is situated
                 var desks = JsonConvert.DeserializeObject<List<DeskFromApi>>(
-                        await httpClient.GetStringAsync("http://127.0.0.1:8000/api_desks/")).Where(x => x.office == curentUserDesk.office).ToList();
+                        await httpClient.GetStringAsync(baseurl + "api_desks/")).Where(x => x.office == curentUserDesk.office).ToList();
                 //get all employees 
                 var auxUsers = JsonConvert.DeserializeObject<List<EmployeeFromApi>>(
-                    await httpClient.GetStringAsync("http://127.0.0.1:8000/api_employees/"));
+                    await httpClient.GetStringAsync(baseurl + "api_employees/"));
                 //join to get userlist in curent office 
 
                 foreach (var emp in auxUsers)
@@ -114,9 +103,9 @@ namespace elSpaco.Controllers
 
                 var userList = from user in auxUsers
                                join desk in desks on user.IdDesk equals desk.idDesk
-                               select new EmployeeFromApi { IdEmployee = user.IdEmployee, firstName =user.firstName, lastName = user.lastName,
-                               RemoteStatus = user.RemoteStatus, Role = user.Role, Gender =user.Gender, Nationality = user.Nationality,
-                               Adress = user.Adress,IdDesk = user.IdDesk};
+                               select new EmployeeFromApi { IdEmployee = user.IdEmployee, firstName = user.firstName, lastName = user.lastName,
+                                   RemoteStatus = user.RemoteStatus, Role = user.Role, Gender = user.Gender, Nationality = user.Nationality,
+                                   Adress = user.Adress, IdDesk = user.IdDesk };
 
                 OfficeStatusModel off = new OfficeStatusModel();
 
@@ -127,7 +116,7 @@ namespace elSpaco.Controllers
                 off.UsableDeskCount = office.deskCount;
                 off.FreeDeskCount = 0;
                 off.OcupationPercentage = 0;
-               
+
 
                 result = new OfficeStatusModel() {
                     OfficeName = office.nameOffice,
@@ -136,39 +125,10 @@ namespace elSpaco.Controllers
                     OcupiedDeskCount = office.usedDesks,
                     UsableDeskCount = office.deskCount,
                     FreeDeskCount = 0,
-                    OcupationPercentage=0
-                };
-                Debug.Write("cv");
-                }
-                return result;
+                    OcupationPercentage = 0 };
             }
-
-
-            /* las pe mai indata
-            [HttpGet("{id}")]
-            public async Task<List<ComplexUser>> Search(string str,string type)
-            {
-                using (HttpClient httpClient = new HttpClient())
-                {
-                    if (type.ToLower() == "name" || type.ToLower() == "surname")
-                    {
-                        httpClient.DefaultRequestHeaders.Add(str, type.ToLower());
-                    }
-                    else
-                    {
-                        //throw new HttpResponseException(responseMessage);
-                    }
-                    string uri = host + path + "?mkt=" + market + "&q=" + System.Net.WebUtility.UrlEncode(query);
-
-                    HttpResponseMessage response = await client.GetAsync(uri);
-
-                    string contentString = await response.Content.ReadAsStringAsync();
-                    dynamic parsedJson = JsonConvert.DeserializeObject(contentString);
-                    Console.WriteLine(parsedJson);
-                }
-                return "value";
-            }
-            */
+            return result;
+        }
 
         // POST api/<UserController>
         [HttpPost]

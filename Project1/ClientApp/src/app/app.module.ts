@@ -42,7 +42,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NgxPaginationModule,
     BrowserAnimationsModule,
     AuthModule.forRoot({
-      ...env.auth,
+      "domain": "dev-c181lrmf.eu.auth0.com",
+      "clientId": "ZWko5ZkNXSEs2O6DDJ4Hydn0gpywu7uG"
     }),
     NgbModule,
   ],
