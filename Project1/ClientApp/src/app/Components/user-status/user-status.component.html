@@ -2,7 +2,7 @@
   <input type="text"
          class="form-control"
          placeholder="Search by Name"
-         [(ngModel)]="Name" />
+         [(ngModel)]="searchName" />
   <div class="input-group-append">
     <button class="btn btn-outline-secondary"
             type="button"
@@ -25,25 +25,21 @@
           Remote: {{selectedUser.remoteStatus}}
           Rol: {{selectedUser.role}}
         </div>
+        <div *ngIf="auth.isAuthenticated$ | async">
+          Birth Date: {{selectedUser.birthDate}}
+          Nationality: {{selectedUser.nationality}}
+          Gender: {{selectedUser.nationality}}
+        </div>
       </div>
     </button>
   </li>
 </ul>
 <pagination-controls previousLabel="Prev" nextLabel="Next" responsive="true">
 </pagination-controls>
-Items per Page:
+<!-- //Modific mai tarziu
+  Items per Page:
 <select (change)="handlePageSizeChange($event)">
   <option *ngFor="let size of pageSizes" [ngValue]="size">
     {{ size }}
   </option>
-</select>
-
-<div *ngIf="selectedUser">
-
-  <h2>{{selectedUser.name}} Details</h2>
-  <div>
-    building: {{selectedUser.buildingName}}
-    office: {{selectedUser.office}}
-    Remote: {{selectedUser.remoteStatus}}
-  </div>
-</div>
+</select>-->

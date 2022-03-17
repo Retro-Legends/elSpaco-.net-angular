@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
+import { AuthService } from '@auth0/auth0-angular';
 
 @Component({
     selector: 'app-user-status',
@@ -15,7 +16,7 @@ export class UserStatusComponent implements OnInit {
   public pagesize: 10;
 
   /** UserStatus ctor */
-  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+  constructor(http: HttpClient, public auth: AuthService, @Inject('BASE_URL') baseUrl: string) {
     http.get<UserStatus[]>(baseUrl + 'alluser/').subscribe(result => {
       this.userStatus = result;
     }, error => console.error(error));
@@ -45,5 +46,8 @@ interface UserStatus {
   office: string;
   remoteStatus: string;
   role: string;
+  birthDate: string;
+  gender: string;
+  nationality: string;
 }
 

@@ -33,8 +33,6 @@ interface OfficeStatus {
 }
 
 function getUserId() {
-  return "alluser/1";
+  return "alluser/8";
   //SchimbaAici
 }
-
-
