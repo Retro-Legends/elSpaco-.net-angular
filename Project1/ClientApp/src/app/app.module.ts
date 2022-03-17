@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
@@ -17,6 +16,7 @@ import { environment as env } from '../environments/environment';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { enableProdMode } from '@angular/core';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -32,14 +32,7 @@ import { enableProdMode } from '@angular/core';
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
-    RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: "user-status", component: UserStatusComponent },
-      { path: "office-status", component: OfficeStatusComponent },
-      { path: "all-users", component: AllUsersComponent },
-      { path: "user-profile", component: UserProfileComponent }
-
-    ]),
+    AppRoutingModule,
     NgxPaginationModule,
     BrowserAnimationsModule,
     AuthModule.forRoot({
@@ -47,6 +40,7 @@ import { enableProdMode } from '@angular/core';
       "clientId": "ZWko5ZkNXSEs2O6DDJ4Hydn0gpywu7uG"
     }),
     NgbModule,
+    LoginComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]

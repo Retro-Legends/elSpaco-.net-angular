@@ -1,8 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
-import { AppUserAuth } from '../auth.model';
-
 
 @Component({
   selector: 'app-nav-menu',
@@ -12,11 +10,9 @@ import { AppUserAuth } from '../auth.model';
 export class NavMenuComponent {
   isExpanded = false;
   isAuthenticated: boolean;
-  auth0;
-
   constructor(public auth: AuthService,
+    @Inject('BASE_URL') baseUrl: string,
     @Inject(DOCUMENT) private doc: Document) {
-    this.auth0 = auth;
   }
 
   public ngOnInit(): void {
@@ -37,6 +33,7 @@ export class NavMenuComponent {
       (success: boolean) => {
         this.isAuthenticated = true;
       },
+      
       error => this.isAuthenticated = false);
   }
 
@@ -45,6 +42,7 @@ export class NavMenuComponent {
     this.auth.isAuthenticated$.subscribe(
       (success: boolean) => {
         this.isAuthenticated = true;
+
       },
       error => this.isAuthenticated = false);
   }
