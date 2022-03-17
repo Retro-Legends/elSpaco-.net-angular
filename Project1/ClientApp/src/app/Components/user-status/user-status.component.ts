@@ -21,8 +21,9 @@ export class UserStatusComponent implements OnInit {
     }, error => console.error(error));
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
+  
   onSelect(user: UserStatus): void {
     if (this.selectedUser == null)
       this.selectedUser = user;

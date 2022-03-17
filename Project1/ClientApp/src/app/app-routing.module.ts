@@ -1,17 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { OfficeStatusComponent } from './Components/office-status/office-status.component';
 import { UserStatusComponent } from './Components/user-status/user-status.component';
 import { HomeComponent } from './home/home.component';
+import { AuthGuard } from '@auth0/auth0-angular';
+
 
 const routes: Routes = [
   //  { path: 'login', component: LoginComponent },
-  //  { path: 'register', component: RegisterComponent },
-  {
-    path: "admin", loadChildren: () => import("../app/Components/admin-section.module").then(m => m.AdminSectionModule)
-  },
-  {
-    path: "user", loadChildren: () => import("../app/Components/user-section.module").then(m => m.UserSectionModule)
-  },
+  { path: 'office-status', component: OfficeStatusComponent, canActivate: [AuthGuard], },
   { path: "user-status", component: UserStatusComponent },
   { path: '', component: HomeComponent, pathMatch: 'full' },
 ];

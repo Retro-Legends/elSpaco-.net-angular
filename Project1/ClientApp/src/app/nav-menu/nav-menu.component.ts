@@ -12,11 +12,13 @@ import { AppUserAuth } from '../auth.model';
 export class NavMenuComponent {
   isExpanded = false;
   isAuthenticated: boolean;
+  auth0;
 
   constructor(public auth: AuthService,
     @Inject(DOCUMENT) private doc: Document) {
-
+    this.auth0 = auth;
   }
+
   public ngOnInit(): void {
   }
 
