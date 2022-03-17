@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 using elSpaco.Models;
 using Microsoft.Extensions.Configuration;
+using System;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -30,18 +31,34 @@ namespace elSpaco.Controllers
                 var employeeslist = JsonConvert.DeserializeObject<List<EmployeeFromApi>>(
                         await httpClient.GetStringAsync(baseUrl + "api_employees" + format)
                     );
-                
-                //ca sa pot sa testez pana se fac modificarile necesare la api
-                //StergeAici
-                
-                //pana aici
+                var deskslist = new List<DeskFromApi>();
 
-                var deskslist = JsonConvert.DeserializeObject<List<DeskFromApi>>(
-                        await httpClient.GetStringAsync(baseUrl + "api_desks" + format)
-                    );
+                try
+                {
+                    deskslist = JsonConvert.DeserializeObject<List<DeskFromApi>>(
+                            await httpClient.GetStringAsync(baseUrl + "api_desks" + format), new JsonSerializerSettings
+                            {
+                                NullValueHandling = NullValueHandling.Ignore
+                            }
+                        );
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine("{0} Exception caught.", e);
+                }
+                foreach (DeskFromApi desk in deskslist)
+                    desk.usedDesks = 0;
+
+
                 var officelist = JsonConvert.DeserializeObject<List<OfficeFromApi>>(
-                        await httpClient.GetStringAsync(baseUrl + "api_offices" + format)
+                        await httpClient.GetStringAsync(baseUrl + "api_offices" + format), new JsonSerializerSettings
+                        {
+                            NullValueHandling = NullValueHandling.Ignore
+                        }
                     );
+                foreach (OfficeFromApi off in officelist)
+                    off.usedDesks = 0;
+
                 var buildinglist = JsonConvert.DeserializeObject<List<CladiriFromApi>>(
                         await httpClient.GetStringAsync(baseUrl + "api_cladiri" + format)
                     );
@@ -54,7 +71,7 @@ namespace elSpaco.Controllers
                                select new ComplexUser{ IdEmployee = employee.IdEmployee, Name = employee.firstName, Surname = employee.lastName,
                                    BuildingName = building.denCladire, Office = office.nameOffice, RemoteStatus = employee.RemoteStatus,
                                    Role = employee.Role, Gender = employee.Gender,Nationality = employee.Nationality,
-                                   Adress = employee.Adress};
+                                   Adress = employee.Adress, BirthDate = employee.BirthDate};
                 foreach (var c in complex)
                     result.Add(c);
             }
@@ -84,25 +101,38 @@ namespace elSpaco.Controllers
                 {
                 //se sterge de aici
                 var employee = JsonConvert.DeserializeObject<EmployeeFromApi>(
-                        await httpClient.GetStringAsync(baseUrl + "api_employee/" + id)
+                        await httpClient.GetStringAsync(baseUrl + "api_employee/" + id),
+                        new JsonSerializerSettings
+                        {
+                            NullValueHandling = NullValueHandling.Ignore
+                        }
                     );
 
                 //get desk current user
                 var curentUserDesk = JsonConvert.DeserializeObject<DeskFromApi>(
-                        await httpClient.GetStringAsync(baseUrl + "api_desk/" + "1"
+                        await httpClient.GetStringAsync(baseUrl + "api_desk/" + employee.desk
                                     /* se sterge + "1" si se lasa ce e mai jos
                                         (JsonConvert.DeserializeObject<EmployeeFromApi>(await httpClient 
                                         .GetStringAsync(baseUrl + "api_employee/" + id))).desk  */
-                                    ));
+                                    ), new JsonSerializerSettings
+                                    {
+                                        NullValueHandling = NullValueHandling.Ignore
+                                    });
                 //get office curent user
                 var office = JsonConvert.DeserializeObject<OfficeFromApi>(
-                        await httpClient.GetStringAsync(baseUrl + "api_office/" + curentUserDesk.office));
+                        await httpClient.GetStringAsync(baseUrl + "api_office/" + curentUserDesk.office), new JsonSerializerSettings
+                        {
+                            NullValueHandling = NullValueHandling.Ignore
+                        });
                 //get building current user
                 var building = JsonConvert.DeserializeObject<CladiriFromApi>(
                         await httpClient.GetStringAsync(baseUrl + "api_cladire/" + office.building));
                 //get all desks in the office where curent user is situated
                 var desks = JsonConvert.DeserializeObject<List<DeskFromApi>>(
-                        await httpClient.GetStringAsync(baseUrl + "api_desks/")).Where(x => x.office == curentUserDesk.office).ToList();
+                        await httpClient.GetStringAsync(baseUrl + "api_desks/"), new JsonSerializerSettings
+                        {
+                            NullValueHandling = NullValueHandling.Ignore
+                        }).Where(x => x.office == curentUserDesk.office).ToList();
                 //get all employees 
                 var auxUsers = JsonConvert.DeserializeObject<List<EmployeeFromApi>>(
                     await httpClient.GetStringAsync(baseUrl + "api_employees/"));
@@ -133,7 +163,8 @@ namespace elSpaco.Controllers
                     OcupiedDeskCount = office.usedDesks,
                     UsableDeskCount = office.deskCount,
                     FreeDeskCount = 0,
-                    OcupationPercentage=0
+                    OcupationPercentage=0,
+                    
                 };
                 Debug.Write("cv");
                 }

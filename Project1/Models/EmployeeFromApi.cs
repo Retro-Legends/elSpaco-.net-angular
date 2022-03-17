@@ -26,6 +26,7 @@ namespace elSpaco.Models
         public string RemoteStatus { get; set; }
         public string Role { get; set; }
         public string Gender { get; set; }
+        public string BirthDate { get; set; }
         public string Nationality { get; set; }
         public string Adress { get; set; }
         public int desk { get; set; }
